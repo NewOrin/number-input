@@ -1,0 +1,212 @@
+package com.neworin.numberinputview
+
+import android.content.Context
+import android.graphics.Color
+import android.support.v4.content.ContextCompat
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
+import android.util.AttributeSet
+import android.util.TypedValue
+import android.view.Gravity
+import android.view.KeyEvent
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+
+/**
+ * author : ZhangFubin
+ * time   : 2018/04/12
+ * desc   :
+ */
+class NumberInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
+
+    /**
+     * DEFAULT VALUES
+     */
+    private val TEXT_SIZE_DEFAULT = 16
+    private val TEXT_COLOR_DEFAULT = ContextCompat.getColor(context, R.color.text_default_color)
+    private val TEXT_DIVIDER_DEFAULT = 5
+    private val TEXT_WIDTH_DEFAULT = 40
+
+    private val BORDER_WIDTH_DEFAULT = 2
+    private val BORDER_COLOR_DEFAULT = ContextCompat.getColor(context, R.color.border_default_color)
+    private val BORDER_RADIUS_DEFAULT = 4
+    private val IS_FILL_DEFAULT = false
+
+    private lateinit var mTextViews: MutableList<BorderTextView>
+    //默认为6个
+    private var mTextViewCounts = 6
+    private var mTextSize = TEXT_SIZE_DEFAULT
+    private var mTextColor = TEXT_COLOR_DEFAULT
+    private var mTextWidth = TEXT_WIDTH_DEFAULT
+    private var mDividerWidth = TEXT_DIVIDER_DEFAULT
+    private var mBorderWidth = BORDER_WIDTH_DEFAULT
+    private var mBorderColor = BORDER_COLOR_DEFAULT
+    private var mBorderRadius = BORDER_RADIUS_DEFAULT
+    private var mIsFill = IS_FILL_DEFAULT
+
+    private lateinit var mLinearLayout: LinearLayout
+    private lateinit var mEditText: EditText
+
+    private val mInputSb = StringBuffer()
+    private var mCount = 0
+    private var mInputContent: String = ""
+    private var mInputCompleteListener: InputCompleteListener? = null
+
+    init {
+        init(attrs)
+    }
+
+    private fun init(attrs: AttributeSet?) {
+        val displayMetrics = context.resources.displayMetrics
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.NumberInputView)
+        mTextSize = ta.getInt(R.styleable.NumberInputView_niv_text_size_sp, TEXT_SIZE_DEFAULT)
+        mTextColor = ta.getColor(R.styleable.NumberInputView_niv_text_color, TEXT_COLOR_DEFAULT)
+        mTextWidth = ta.getDimensionPixelSize(R.styleable.NumberInputView_niv_text_width, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                TEXT_WIDTH_DEFAULT.toFloat(), displayMetrics).toInt())
+        mDividerWidth = ta.getDimensionPixelSize(R.styleable.NumberInputView_niv_text_divider, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                TEXT_DIVIDER_DEFAULT.toFloat(), displayMetrics).toInt())
+        mBorderWidth = ta.getDimensionPixelSize(R.styleable.NumberInputView_niv_border_width, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                BORDER_WIDTH_DEFAULT.toFloat(), displayMetrics).toInt())
+        mBorderRadius = ta.getDimensionPixelSize(R.styleable.NumberInputView_niv_border_radius, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                BORDER_RADIUS_DEFAULT.toFloat(), displayMetrics).toInt())
+        mBorderColor = ta.getColor(R.styleable.NumberInputView_niv_border_color, mBorderColor)
+        mIsFill = ta.getBoolean(R.styleable.NumberInputView_niv_is_fill, IS_FILL_DEFAULT)
+        ta.recycle()
+
+        setBackgroundColor(ContextCompat.getColor(context, R.color.input_layout_bg))
+        initTextView()
+        initLinearLayout()
+        initEditText()
+        setPadding(10, 10, 10, 10)
+        val linearParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        linearParams.addRule(RelativeLayout.CENTER_IN_PARENT)
+        addView(mLinearLayout, linearParams)
+        val editParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        addView(mEditText, editParams)
+        setListener()
+    }
+
+    /**
+     * 初始化TextView
+     */
+    private fun initTextView() {
+        mTextViews = mutableListOf()
+        for (i in 1..mTextViewCounts) {
+            val tv = BorderTextView(context)
+            tv.let {
+                it.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize.toFloat())
+                it.setTextColor(mTextColor)
+                it.gravity = Gravity.CENTER
+                it.setIsFill(mIsFill)
+                it.setStrokeColor(mBorderColor)
+                if (mIsFill) {
+                    it.setStrokeWidth(0)
+                } else {
+                    it.setStrokeWidth(mBorderWidth)
+                }
+                it.setCornerRadius(mBorderRadius)
+            }
+            mTextViews.add(tv)
+        }
+    }
+
+    /**
+     * 初始化LinearLayout
+     */
+    private fun initLinearLayout() {
+        val tvParams = LinearLayout.LayoutParams(mTextWidth, mTextWidth)
+        tvParams.setMargins(mDividerWidth, 0, mDividerWidth, 0)
+        mLinearLayout = LinearLayout(context)
+        mLinearLayout.let {
+            it.orientation = LinearLayout.HORIZONTAL
+            it.gravity = Gravity.CENTER
+        }
+        for (tv in mTextViews) {
+            mLinearLayout.addView(tv, tvParams)
+        }
+    }
+
+    /**
+     * 初始化EditText
+     */
+    private fun initEditText() {
+        mEditText = EditText(context)
+        mEditText.let {
+            it.setBackgroundColor(Color.TRANSPARENT)
+            it.isFocusable = true
+            it.isCursorVisible = false
+            it.inputType = InputType.TYPE_CLASS_NUMBER
+        }
+    }
+
+    /**
+     * 设置监听
+     */
+    private fun setListener() {
+        mEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (mInputSb.length == mTextViewCounts) {
+                    return
+                }
+                mInputSb.append(s)
+                mEditText.setText("")
+                mCount = mInputSb.length
+                mInputContent = mInputSb.toString()
+                if (mInputSb.length == mTextViewCounts) {
+                    mInputCompleteListener?.inputComplete(mInputSb.toString())
+                }
+                mInputSb.forEachIndexed { index, c ->
+                    mTextViews[index].text = c.toString()
+                }
+            }
+        })
+        mEditText.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_DOWN) {
+                if (onKeyDelete()) {
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
+    }
+
+    private fun onKeyDelete(): Boolean {
+        if (mCount == 0) {
+            mCount = mTextViewCounts
+            return true
+        }
+        if (mInputSb.isNotEmpty()) {
+            //删除相应的字符
+            mInputSb.delete((mCount - 1), mCount)
+            mCount--
+            mInputContent = mInputSb.toString()
+            mTextViews[mInputSb.length].text = ""
+        }
+        return false
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        var width = getScreenWidth(context.applicationContext)
+        var height = getScreenHeight(context.applicationContext)
+        setMeasuredDimension(width, height)
+    }
+
+    fun setInputCompleteListener(inputCompleteListener: InputCompleteListener) {
+        this.mInputCompleteListener = inputCompleteListener
+    }
+
+    interface InputCompleteListener {
+        fun inputComplete(content: String)
+    }
+}
