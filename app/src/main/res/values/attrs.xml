@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="NumberInputView">
+        <attr name="niv_text_size_sp" format="integer"/>
+        <attr name="niv_text_color" format="color"/>
+        <attr name="niv_text_divider" format="dimension"/>
+        <attr name="niv_text_width" format="dimension"/>
+        <attr name="niv_border_width" format="dimension"/>
+        <attr name="niv_border_color" format="color"/>
+        <attr name="niv_border_radius" format="dimension"/>
+        <attr name="niv_is_fill" format="boolean"/>
+    </declare-styleable>
+</resources>
