@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NumberInputView.iml" filepath="$PROJECT_DIR$/NumberInputView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/number-input/app.iml" filepath="$PROJECT_DIR$/number-input/app.iml" />
     </modules>
   </component>
 </project>
