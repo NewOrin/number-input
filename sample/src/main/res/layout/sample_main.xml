@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp"
+    tools:context="com.neworin.sample.MainActivity">
+
+    <com.neworin.numberinputview.widget.NumberInputView
+        android:id="@+id/sample_niv1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:niv_count="4"
+        app:niv_is_fill="false"
+        app:niv_text_size_sp="18"/>
+
+    <com.neworin.numberinputview.widget.NumberInputView
+        android:id="@+id/sample_niv2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:niv_border_color="@color/colorPrimaryDark"
+        app:niv_border_radius="0dp"
+        app:niv_count="5"
+        app:niv_text_color="@color/color_red"/>
+
+    <com.neworin.numberinputview.widget.NumberInputView
+        android:id="@+id/sample_niv3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:niv_border_color="@color/input_layout_bg"
+        app:niv_border_radius="0dp"
+        app:niv_count="6"
+        app:niv_is_fill="true"
+        app:niv_text_size_sp="20"/>
+
+    <com.neworin.numberinputview.widget.NumberInputView
+        android:id="@+id/sample_niv4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:niv_count="6"
+        app:niv_is_pw_mode="true"
+        app:niv_text_color="@color/colorPrimary"
+        app:niv_text_size_sp="18"/>
+
+</LinearLayout>

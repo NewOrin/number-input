@@ -1,1 +1,1 @@
-include ':number-input'
+include ':number-input', ':sample'
