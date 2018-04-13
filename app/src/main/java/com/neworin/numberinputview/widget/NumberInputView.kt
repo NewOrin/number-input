@@ -1,4 +1,4 @@
-package com.neworin.numberinputview
+package com.neworin.numberinputview.widget
 
 import android.content.Context
 import android.graphics.Color
@@ -14,6 +14,8 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import com.neworin.numberinputview.R
+import com.neworin.numberinputview.util.dp2px
 
 /**
  * author : ZhangFubin

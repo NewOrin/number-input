@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.neworin.numberinputview.MainActivity">
 
-    <com.neworin.numberinputview.NumberInputView
+    <com.neworin.numberinputview.widget.NumberInputView
         android:id="@+id/main_niv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

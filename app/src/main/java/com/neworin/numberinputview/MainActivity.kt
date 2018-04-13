@@ -2,6 +2,8 @@ package com.neworin.numberinputview
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.neworin.numberinputview.util.showToast
+import com.neworin.numberinputview.widget.NumberInputView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

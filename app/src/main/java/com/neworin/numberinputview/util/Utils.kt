@@ -1,4 +1,4 @@
-package com.neworin.numberinputview
+package com.neworin.numberinputview.util
 
 import android.content.Context
 import android.graphics.Point
