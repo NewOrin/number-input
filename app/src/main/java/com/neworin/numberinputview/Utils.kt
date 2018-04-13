@@ -2,14 +2,19 @@ package com.neworin.numberinputview
 
 import android.content.Context
 import android.graphics.Point
-import android.os.Build
 import android.view.WindowManager
+import android.widget.Toast
 
 /**
  * author : ZhangFubin
  * time   : 2018/04/12
  * desc   :
  */
+
+fun Context.showToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+}
+
 fun dp2px(context: Context, dpValue: Float): Int {
     val scale = context.resources.displayMetrics.density
     return (dpValue * scale + 0.5f).toInt()
