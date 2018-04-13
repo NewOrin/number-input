@@ -11,5 +11,6 @@
         <attr name="niv_border_radius" format="dimension"/>
         <attr name="niv_is_fill" format="boolean"/>
         <attr name="niv_count" format="integer"/>
+        <attr name="niv_is_pw_mode" format="boolean"/>
     </declare-styleable>
 </resources>

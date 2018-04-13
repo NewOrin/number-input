@@ -31,12 +31,14 @@ class BorderTextView @JvmOverloads constructor(context: Context, attrs: Attribut
      */
     private val mStrokePaint = Paint()
     private var mBgPaint: Paint? = null
+    private val mDotPaint = Paint()
     /**
      * 是否填充矩形
      */
     private var isFill = false
 
     private var rectF: RectF? = null
+    private var mIsPassWordMode = false
 
     override fun onDraw(canvas: Canvas) {
         mStrokePaint.isAntiAlias = true
@@ -53,6 +55,12 @@ class BorderTextView @JvmOverloads constructor(context: Context, attrs: Attribut
             canvas.drawRoundRect(rectF!!, cornerRadius.toFloat(), cornerRadius.toFloat(), mBgPaint!!)
         }
         canvas.drawRoundRect(rectF!!, cornerRadius.toFloat(), cornerRadius.toFloat(), mStrokePaint)
+        if (mIsPassWordMode && text.isNotEmpty()) {
+            mDotPaint.style = Paint.Style.FILL
+            mDotPaint.color = textColors.defaultColor
+            val xy = measuredWidth / 2.toFloat()
+            canvas.drawCircle(xy, xy, textSize / 2, mDotPaint)
+        }
         super.onDraw(canvas)
     }
 
@@ -86,6 +94,14 @@ class BorderTextView @JvmOverloads constructor(context: Context, attrs: Attribut
      */
     fun setIsFill(isFill: Boolean) {
         this.isFill = isFill
+        invalidate()
+    }
+
+    /**
+     * 是否为密码模式
+     */
+    fun setIsPasswordMode(isPasswordMode: Boolean) {
+        this.mIsPassWordMode = isPasswordMode
         invalidate()
     }
 

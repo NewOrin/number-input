@@ -47,6 +47,7 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     private var mBorderColor = BORDER_COLOR_DEFAULT
     private var mBorderRadius = BORDER_RADIUS_DEFAULT
     private var mIsFill = IS_FILL_DEFAULT
+    private var mIsPwMode = false
 
     private lateinit var mLinearLayout: LinearLayout
     private lateinit var mEditText: EditText
@@ -77,6 +78,7 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         mBorderColor = ta.getColor(R.styleable.NumberInputView_niv_border_color, mBorderColor)
         mIsFill = ta.getBoolean(R.styleable.NumberInputView_niv_is_fill, IS_FILL_DEFAULT)
         mTextViewCounts = ta.getInt(R.styleable.NumberInputView_niv_count, TEXT_DEFAULT_COUNTS)
+        mIsPwMode = ta.getBoolean(R.styleable.NumberInputView_niv_is_pw_mode, false)
         if (mTextViewCounts > 10) {
             mTextViewCounts = TEXT_DEFAULT_COUNTS
         }
@@ -107,6 +109,7 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
                 it.gravity = Gravity.CENTER
                 it.setIsFill(mIsFill)
                 it.setStrokeColor(mBorderColor)
+                it.setIsPasswordMode(mIsPwMode)
                 if (mIsFill) {
                     it.setStrokeWidth(0)
                 } else {
