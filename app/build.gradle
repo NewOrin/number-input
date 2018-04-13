@@ -6,12 +6,15 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
+
+    def verName = "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
+
     defaultConfig {
         applicationId "com.neworin.numberinputview"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0"
+        versionName verName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
