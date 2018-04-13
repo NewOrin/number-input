@@ -15,8 +15,8 @@ fun Context.showToast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
-fun dp2px(context: Context, dpValue: Float): Int {
-    val scale = context.resources.displayMetrics.density
+fun Context.dp2px(dpValue: Float): Int {
+    val scale = this.resources.displayMetrics.density
     return (dpValue * scale + 0.5f).toInt()
 }
 

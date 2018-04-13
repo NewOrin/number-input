@@ -10,17 +10,17 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
-import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 
 /**
  * author : ZhangFubin
  * time   : 2018/04/12
- * desc   :
+ * desc   : 自定义数字输入框
  */
-class NumberInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
+class NumberInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
     /**
      * DEFAULT VALUES
@@ -29,6 +29,7 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     private val TEXT_COLOR_DEFAULT = ContextCompat.getColor(context, R.color.text_default_color)
     private val TEXT_DIVIDER_DEFAULT = 5
     private val TEXT_WIDTH_DEFAULT = 40
+    private val TEXT_DEFAULT_COUNTS = 6
 
     private val BORDER_WIDTH_DEFAULT = 2
     private val BORDER_COLOR_DEFAULT = ContextCompat.getColor(context, R.color.border_default_color)
@@ -37,7 +38,7 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private lateinit var mTextViews: MutableList<BorderTextView>
     //默认为6个
-    private var mTextViewCounts = 6
+    private var mTextViewCounts = TEXT_DEFAULT_COUNTS
     private var mTextSize = TEXT_SIZE_DEFAULT
     private var mTextColor = TEXT_COLOR_DEFAULT
     private var mTextWidth = TEXT_WIDTH_DEFAULT
@@ -51,9 +52,10 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     private lateinit var mEditText: EditText
 
     private val mInputSb = StringBuffer()
-    private var mCount = 0
-    private var mInputContent: String = ""
     private var mInputCompleteListener: InputCompleteListener? = null
+
+    private val PARENT_DEFAULT_WIDTH = context.dp2px((TEXT_WIDTH_DEFAULT + TEXT_DIVIDER_DEFAULT * 2) * (TEXT_DEFAULT_COUNTS).toFloat())
+    private val PARENT_DEFAULT_HEIGHT = context.dp2px((TEXT_WIDTH_DEFAULT + TEXT_DIVIDER_DEFAULT * 2).toFloat())
 
     init {
         init(attrs)
@@ -74,17 +76,20 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
                 BORDER_RADIUS_DEFAULT.toFloat(), displayMetrics).toInt())
         mBorderColor = ta.getColor(R.styleable.NumberInputView_niv_border_color, mBorderColor)
         mIsFill = ta.getBoolean(R.styleable.NumberInputView_niv_is_fill, IS_FILL_DEFAULT)
+        mTextViewCounts = ta.getInt(R.styleable.NumberInputView_niv_count, TEXT_DEFAULT_COUNTS)
+        if (mTextViewCounts > 10) {
+            mTextViewCounts = TEXT_DEFAULT_COUNTS
+        }
         ta.recycle()
 
-        setBackgroundColor(ContextCompat.getColor(context, R.color.input_layout_bg))
         initTextView()
         initLinearLayout()
         initEditText()
-        setPadding(10, 10, 10, 10)
-        val linearParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        linearParams.addRule(RelativeLayout.CENTER_IN_PARENT)
+        val linearParams = LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        linearParams.gravity = Gravity.CENTER
         addView(mLinearLayout, linearParams)
-        val editParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        val editParams = LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+        editParams.gravity = Gravity.CENTER
         addView(mEditText, editParams)
         setListener()
     }
@@ -117,8 +122,9 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
      * 初始化LinearLayout
      */
     private fun initLinearLayout() {
-        val tvParams = LinearLayout.LayoutParams(mTextWidth, mTextWidth)
+        val tvParams = RelativeLayout.LayoutParams(mTextWidth, mTextWidth)
         tvParams.setMargins(mDividerWidth, 0, mDividerWidth, 0)
+        tvParams.addRule(Gravity.CENTER)
         mLinearLayout = LinearLayout(context)
         mLinearLayout.let {
             it.orientation = LinearLayout.HORIZONTAL
@@ -186,9 +192,39 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        var width = getScreenWidth(context.applicationContext)
-        var height = getScreenHeight(context.applicationContext)
-        setMeasuredDimension(width, height)
+        setMeasuredDimension(handleWidth(widthMeasureSpec), handleHeight(heightMeasureSpec))
+    }
+
+    /**
+     * Handle width
+     */
+    private fun handleWidth(measureSpec: Int): Int {
+        val result: Int
+        val specMode = MeasureSpec.getMode(measureSpec)
+        val specSize = MeasureSpec.getSize(measureSpec)
+        result = when (specMode) {
+            MeasureSpec.EXACTLY -> specSize
+            MeasureSpec.AT_MOST -> Math.min(PARENT_DEFAULT_WIDTH, specSize)
+            MeasureSpec.UNSPECIFIED -> PARENT_DEFAULT_WIDTH
+            else -> PARENT_DEFAULT_WIDTH
+        }
+        return result
+    }
+
+    /**
+     * Handle height
+     */
+    private fun handleHeight(measureSpec: Int): Int {
+        val result: Int
+        val specMode = MeasureSpec.getMode(measureSpec)
+        val specSize = MeasureSpec.getSize(measureSpec)
+        result = when (specMode) {
+            MeasureSpec.EXACTLY -> specSize
+            MeasureSpec.AT_MOST -> Math.min(PARENT_DEFAULT_HEIGHT, specSize)
+            MeasureSpec.UNSPECIFIED -> PARENT_DEFAULT_HEIGHT
+            else -> PARENT_DEFAULT_HEIGHT
+        }
+        return result
     }
 
     fun setInputCompleteListener(inputCompleteListener: InputCompleteListener) {

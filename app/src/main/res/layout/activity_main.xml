@@ -10,7 +10,8 @@
     <com.neworin.numberinputview.NumberInputView
         android:id="@+id/main_niv"
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:niv_count="6"
         app:niv_is_fill="false"/>
 </RelativeLayout>
