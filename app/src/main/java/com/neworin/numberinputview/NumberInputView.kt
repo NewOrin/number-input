@@ -154,45 +154,34 @@ class NumberInputView @JvmOverloads constructor(context: Context, attrs: Attribu
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (mInputSb.length == mTextViewCounts) {
-                    return
-                }
-                mInputSb.append(s)
-                mEditText.setText("")
-                mCount = mInputSb.length
-                mInputContent = mInputSb.toString()
-                if (mInputSb.length == mTextViewCounts) {
-                    mInputCompleteListener?.inputComplete(mInputSb.toString())
-                }
-                mInputSb.forEachIndexed { index, c ->
-                    mTextViews[index].text = c.toString()
+                if (s?.isNotEmpty() == true) {
+                    mEditText.setText("")
+                    if (mInputSb.length >= mTextViewCounts) {
+                        mInputCompleteListener?.inputComplete(mInputSb.toString())
+                        return
+                    }
+                    if (mInputSb.length < mTextViewCounts) {
+                        mInputSb.append(s.toString())
+                        mInputSb.forEachIndexed { index, c ->
+                            mTextViews[index].text = c.toString()
+                        }
+                        if (mInputSb.length == mTextViewCounts) {
+                            mInputCompleteListener?.inputComplete(mInputSb.toString())
+                        }
+                    }
                 }
             }
         })
         mEditText.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_DOWN) {
-                if (onKeyDelete()) {
+                if (mInputSb.isNotEmpty()) {
+                    mInputSb.delete(mInputSb.length - 1, mInputSb.length)
+                    mTextViews[mInputSb.length].text = ""
                     return@setOnKeyListener true
                 }
-                return@setOnKeyListener true
             }
             return@setOnKeyListener false
         }
-    }
-
-    private fun onKeyDelete(): Boolean {
-        if (mCount == 0) {
-            mCount = mTextViewCounts
-            return true
-        }
-        if (mInputSb.isNotEmpty()) {
-            //删除相应的字符
-            mInputSb.delete((mCount - 1), mCount)
-            mCount--
-            mInputContent = mInputSb.toString()
-            mTextViews[mInputSb.length].text = ""
-        }
-        return false
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
