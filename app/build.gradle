@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
@@ -10,7 +10,6 @@ android {
     def verName = "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
 
     defaultConfig {
-        applicationId "com.neworin.numberinputview"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
