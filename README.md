@@ -8,6 +8,41 @@
 
 ![示例图片](https://github.com/NewOrin/number-input/blob/master/sample/screenshot01.png)
 
+### 使用
+
+- 在您项目的build.gradle文件中添加 JitPack 仓库
+
+  ```groovy
+  	allprojects {
+  		repositories {
+  			...
+  			maven { url 'https://jitpack.io' }
+  		}
+  	}
+  ```
+
+- 添加项目依赖
+
+  ```groovy
+  	dependencies {
+  	        compile 'com.github.NewOrin:number-input:v1.0.0'
+  	}
+  ```
+
+- 布局文件中使用
+
+  ```xml
+  <com.neworin.numberinputview.widget.NumberInputView
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          app:niv_border_color="@color/input_layout_bg"
+          app:niv_border_radius="0dp"
+          app:niv_count="6"
+          app:niv_is_fill="true"
+          app:niv_text_size_sp="20"/>
+  ```
+
 ### 自定义属性
 
 | name              | 说明                  | format    | 默认值     |
@@ -186,26 +221,17 @@
 
    - FrameLayout就简单了，将上面的LinearLayout和EditText放一起即可
 
-### That's all，如有问题，不吝赐教~
+---
 
-MIT License
+## License
 
+```
 Copyright (c) 2018 NewOrin Zhang
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
